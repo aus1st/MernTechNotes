@@ -1,0 +1,26 @@
+@import url('https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap');
+/* Apply these styles to all elements */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Apply these styles to the <html> element */
+  html {
+    font-size: 16px; /* You can adjust the font size as needed */
+    font-family: 'Share Tech Mono', monospace; /* You can change the font-family as needed */
+  }
+  
+  /* Apply these styles to the <body> element */
+  body {
+    min-height: 100vh; /* Minimum height of the viewport */
+    background-color: #333; /* Background color, change as desired */
+    color: whitesmoke; /* Font color, change as desired */
+    display: grid; /* Use grid layout */
+    grid-template-columns: 1fr; /* Define grid columns as needed */
+    padding: 20px; /* Padding around the content, adjust as needed */
+    place-content: center;
+    text-align: center;
+  }
+  
