@@ -50,14 +50,13 @@ const createNewUser = asyncHandler(async (req, res) => {
 // @route PUT /users
 // @access private
 const updateUser = asyncHandler(async (req, res) => {
-  const { id, userName, password, roles, active } = req.body;
+  const { id, userName, password, roles, isActive } = req.body;
   if (
     !id ||
     !userName ||
-    !password ||
     !Array.isArray(roles) ||
     !roles.length ||
-    typeof active !== "boolean"
+    typeof isActive !== "boolean"
   ) {
     return res.status(400).json({ message: "All fields are required" });
   }
@@ -65,17 +64,17 @@ const updateUser = asyncHandler(async (req, res) => {
   const user = await User.findById(id).exec();
 
   if (!user) {
-    return res.send(404).json({ message: "User not found" });
+    return res.status(404).json({ message: "User not found" });
   }
   const duplicate = await User.findOne({ userName }).lean().exec();
 
   if (duplicate && duplicate?._id !== id) {
-    return res.send(409).json({ message: "Duplicate UserName" });
+    return res.status(409).json({ message: "Duplicate UserName" });
   }
 
   user.userName = userName;
   user.roles = roles;
-  user.active = active;
+  user.isActive = isActive;
   if (password) {
     user.password = await bcrypt.hash(password, 10);
   }
@@ -89,18 +88,18 @@ const deleteUser = asyncHandler(async (req, res) => {
   const { id } = req.body;
 
   if (!id) {
-    return res.send(400).json({ message: "User ID Required" });
+    return res.status(400).json({ message: "User ID Required" });
   }
 
-  const notes = await Note.findOne({ user: id }).lean().exec();
-  if (notes?.length) {
-    return res.send(400).json({ message: "User has assigned notes" });
+  const note = await Note.findOne({ user: id }).lean().exec();
+  if (note) {
+    return res.status(400).json({ message: "User has assigned notes" });
   }
 
   const user = await User.findById(id).exec();
 
   if (!user) {
-    return res.send(404).json({ message: "User not found" });
+    return res.status(404).json({ message: "User not found" });
   }
   const result = await User.deleteOne();
 
